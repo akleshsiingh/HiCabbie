@@ -7,6 +7,6 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class ServiceBuilderModule {
 
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = [])
     abstract fun contributeServiceCar():ServiceCar
 }

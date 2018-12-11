@@ -47,4 +47,9 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.14.1'
     kapt 'com.google.dagger:dagger-android-processor:2.14.1'
     implementation 'com.google.dagger:dagger-android-support:2.14.1'
+    implementation 'com.android.support:design:28.0.0'
+    //maps
+    implementation 'com.google.android.gms:play-services-maps:16.0.0'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+
 }

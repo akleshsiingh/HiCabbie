@@ -1,6 +1,7 @@
 package com.example.di.module
 
 import com.example.hicabbie.data.Api.Api
+import com.example.hicabbie.data.Constants
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -35,7 +36,7 @@ class NetworkModule {
         return Retrofit.Builder()
             .addConverterFactory(MoshiConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
-            .baseUrl("https://api.github.com")
+            .baseUrl(Constants.BASE_URL)
             .client(client.build())
             .build()
     }
