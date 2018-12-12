@@ -1,6 +1,7 @@
 package com.example.hicabbie.ui.home
 
 import android.content.Context
+import android.os.Handler
 import android.util.Log
 import com.example.di.ActivityScoped
 import com.example.hicabbie.data.response.ResponseLocation
@@ -13,11 +14,9 @@ class PresenterHome @Inject constructor(private val repo: ILocationRepo, private
     fun service(service: ServiceCar) {
         this.service = service
         view.updateButtonStatus(service.started)
-
         service.dismissNotification()
         service.updateListner(object : OnUpdateListner {
             override fun update(it: ResponseLocation) {
-                Log.e("update ", " $it")
                 view.updateLocation(it)
             }
         })
@@ -35,6 +34,14 @@ class PresenterHome @Inject constructor(private val repo: ILocationRepo, private
             service.updateListner(null)
         } else
             ServiceCar.getNewIntent(context).also { context.applicationContext.stopService(it) }
+    }
+
+    fun checkLastLocation(): ResponseLocation? {
+        return service.getLastLocation()?.apply { view.updateLocation(this) }
+    }
+
+    fun destroy() {
+
     }
 
 }

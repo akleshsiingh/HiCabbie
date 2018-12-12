@@ -35,6 +35,7 @@ class ServiceCar : Service() {
     private val iBinder: IBinder = MyBinder()
     var started = false
     private val NOTIF_ID = 1106
+    private var lastLocationResponse: ResponseLocation? = null
 
     override fun onBind(intent: Intent?): IBinder? {
         return iBinder
@@ -57,28 +58,39 @@ class ServiceCar : Service() {
             cd = CompositeDisposable()
         if (started)
             cd.add(Observable
-                .interval(1, TimeUnit.SECONDS)
+                .interval(15, TimeUnit.SECONDS)
                 .startWith(0)
                 .flatMap { api.getLocation().toObservable() }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    updateListner?.update(it)
-                    updateNotification(it)
-                }, { it.printStackTrace() })
-            )
-        else cd.dispose()
+                    if (it.status.equals("success")) {
+                        this.lastLocationResponse = it
+                        updateListner?.update(it)
+                        updateNotification()
+                    }
+                }, { it.printStackTrace() }))
+        else {
+            cd.dispose()
+            lastLocationResponse = null
+        }
 
     }
+
+    fun getLastLocation() = lastLocationResponse
+
 
     var updateListner: OnUpdateListner? = null
     fun updateListner(updateListner: OnUpdateListner?) {
         this.updateListner = updateListner
     }
 
-    private fun updateNotification(loc: ResponseLocation) {
-        remoteViews?.let {
-            it.setTextViewText(R.id.tvProgress, "location updates in progress - ${loc.latitude} - ${loc.longitude} ")
-            notificationManager.notify(NOTIF_ID, notification?.build())
+    private fun updateNotification() {
+        remoteViews?.let { v ->
+            lastLocationResponse?.let { loc ->
+                v.setTextViewText(R.id.tvProgress, "location updates in progress - ${loc.latitude} - ${loc.longitude} ")
+                notificationManager.notify(NOTIF_ID, notification?.build())
+            }
+
         }
     }
 
@@ -110,12 +122,13 @@ class ServiceCar : Service() {
                 setContent(remoteViews)
             }
         startForeground(NOTIF_ID, notification?.build())
+        updateNotification()
     }
 
     override fun onDestroy() {
-        Log.e(TAG, "onDestroy")
         stopForeground(true)
         started = false
+        lastLocationResponse = null
         cd.clear()
         super.onDestroy()
     }
