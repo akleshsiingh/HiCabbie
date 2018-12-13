@@ -2,6 +2,7 @@ package com.example.hicabbie.service
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -50,6 +51,12 @@ class ServiceCar : Service() {
 
     private val TAG = ServiceCar::class.java.simpleName
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val type = intent?.getIntExtra(REQUEST_CODE, 0)
+        Log.e(TAG, " code " + intent?.getIntExtra(REQUEST_CODE, 0))
+        when (type) {
+            88 -> stopSelf()
+            else -> { }
+        }
         return START_NOT_STICKY
     }
 
@@ -68,7 +75,8 @@ class ServiceCar : Service() {
                         updateListner?.update(it)
                         updateNotification()
                     }
-                }, { it.printStackTrace() }))
+                }, { updateNotification(msg = it.localizedMessage) })
+            )
         else {
             cd.dispose()
             lastLocationResponse = null
@@ -84,23 +92,30 @@ class ServiceCar : Service() {
         this.updateListner = updateListner
     }
 
-    private fun updateNotification() {
+    private fun updateNotification(msg: String = "") {
         remoteViews?.let { v ->
-            lastLocationResponse?.let { loc ->
-                v.setTextViewText(R.id.tvProgress, "location updates in progress - ${loc.latitude} - ${loc.longitude} ")
-                notificationManager.notify(NOTIF_ID, notification?.build())
-            }
-
+            if (!msg.isEmpty())
+                v.setTextViewText(R.id.tvProgress, msg)
+            else
+                lastLocationResponse?.let { loc ->
+                    v.setTextViewText(
+                        R.id.tvProgress,
+                        "location updates in progress - ${loc.latitude} - ${loc.longitude} "
+                    )
+                }
+            notificationManager.notify(NOTIF_ID, notification?.build())
         }
     }
 
     private var remoteViews: RemoteViews? = null
     private var notification: NotificationCompat.Builder? = null
 
-    fun showNotification() {
+    private val REQUEST_CODE: String = "request_code"
 
+    fun showNotification() {
         val channelID = "channelID"
         val channelName = "CHANNEL_NAME"
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH)
                 .apply {
@@ -111,6 +126,22 @@ class ServiceCar : Service() {
             notificationManager.createNotificationChannel(channel)
         }
         remoteViews = RemoteViews(context.packageName, R.layout.notify_row)
+            .apply {  }
+        val remoteViews2 = RemoteViews(context.packageName, R.layout.notify_row_big)
+        //stop service
+        val stopIntent = Intent(context, ServiceCar::class.java)
+            .apply { putExtra(REQUEST_CODE, 88) }
+        val pIntent = PendingIntent.getService(context, 88, stopIntent, 0)
+
+        //register clicks
+        remoteViews?.apply {
+            setOnClickPendingIntent(R.id.ivBtnStop, pIntent)
+        }
+        //register click
+        remoteViews2.apply {
+            setOnClickPendingIntent(R.id.ivBtnStop, pIntent)
+        }
+
 //      Notification
         notification = NotificationCompat.Builder(context, channelID)
             .apply {
@@ -120,16 +151,17 @@ class ServiceCar : Service() {
                 setDefaults(0)
                 priority = NotificationCompat.PRIORITY_LOW
                 setContent(remoteViews)
+                setCustomBigContentView(remoteViews2)
             }
         startForeground(NOTIF_ID, notification?.build())
         updateNotification()
     }
 
     override fun onDestroy() {
+        cd.clear()
         stopForeground(true)
         started = false
         lastLocationResponse = null
-        cd.clear()
         super.onDestroy()
     }
 
