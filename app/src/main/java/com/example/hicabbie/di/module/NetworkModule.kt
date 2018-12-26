@@ -1,6 +1,6 @@
 package com.example.di.module
 
-import com.example.hicabbie.data.Api.Api
+import com.example.hicabbie.data.api.Api
 import com.example.hicabbie.data.Constants
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import dagger.Module

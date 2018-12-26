@@ -1,4 +1,4 @@
-package com.example.hicabbie.data.Api
+package com.example.hicabbie.data.api
 
 import com.example.hicabbie.data.Constants
 import com.example.hicabbie.data.response.ResponseLocation

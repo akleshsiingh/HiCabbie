@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:orientation="vertical"
+              android:layout_margin="6dp"
+              android:layout_height="wrap_content">
+
+
+    <LinearLayout
+            android:padding="10dp"
+            android:background="@drawable/bg_rect_blue"
+            android:layout_marginRight="50dp"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+        <TextView android:layout_width="wrap_content"
+                  android:minLines="1"
+                  android:textColor="@color/white"
+                  android:id="@+id/tvName"
+                  android:layout_height="wrap_content"/>
+
+        <TextView
+                android:id="@+id/textMsgOther"
+                android:textColor="@color/white"
+                android:layout_gravity="end"
+                android:text="consectetur adipiscing elit. Phasellus semper ex a nunc rutrum varius. Nunc dictum, dolor in posuere sollicitudin, neque nunc imperdiet urna, sodales feugiat quam arcu nec risus. In at porttitor leo. Quisque varius sagittis ullamcorper. Ut venenatis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>

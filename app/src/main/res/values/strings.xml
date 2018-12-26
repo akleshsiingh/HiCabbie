@@ -3,4 +3,11 @@
     <string name="google_maps_key">AIzaSyDTh1LGbAqtI2CaesZob7J03toFneQQKUw</string>
     <string name="location_updates">Location Updates</string>
     <string name="location_updates_in_progress">location updates in progress - %s</string>
+    <string name="other_user_msg">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus semper ex a nunc
+        rutrum varius. Nunc dictum, dolor in posuere sollicitudin, neque nunc imperdiet urna, sodales feugiat quam arcu
+        nec risus. In at porttitor leo. Quisque varius sagittis ullamcorper. Ut venenatis
+    </string>
+    <string name="first_user_msg">Donec eu consequat dui, vitae finibus sapien. Ut sed dictum mauris. Sed efficitur
+        justo at nunc elementum, eget cursus eros blandit. Etiam scelerisque, enim in
+    </string>
 </resources>

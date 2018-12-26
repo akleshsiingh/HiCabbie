@@ -1,7 +1,7 @@
 package com.example.hicabbie.ui.home
 
 import com.example.di.ActivityScoped
-import com.example.hicabbie.data.Api.Api
+import com.example.hicabbie.data.api.Api
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

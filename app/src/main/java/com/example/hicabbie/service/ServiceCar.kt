@@ -14,7 +14,7 @@ import android.support.v4.app.NotificationCompat
 import android.util.Log
 import android.widget.RemoteViews
 import com.example.hicabbie.R
-import com.example.hicabbie.data.Api.Api
+import com.example.hicabbie.data.api.Api
 import com.example.hicabbie.data.response.ResponseLocation
 import com.example.hicabbie.ui.home.OnUpdateListner
 import dagger.android.AndroidInjection
